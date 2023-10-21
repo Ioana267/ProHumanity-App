@@ -13,7 +13,7 @@ Va scriu aici toate comenzile github pe care sa le folositi IN TERMINAL.
 
 # Pentru a da update la codul de pe github (daca tu schimbi ceva la tine pe laptop si este in bine, doar cand ai terminat taskul atribuit trebuie sa pui urmatoarea comanda pentru a da update pe github!!)
 
-git add .
+git add puiAiciFisierul
 git commit -m "Your commit message"
 
 git push origin main # Replace "main" with your branch name
@@ -22,3 +22,10 @@ git push origin main # Replace "main" with your branch name
 
 git fetch origin
 git merge origin/main
+
+# Pentru cand ai pe laptop totul si vrei sa deschizi cu expo faci asa:
+
+1. deschide terminalul laptopului
+2. scrie comanda:
+   npm install -g expo-cli
+3. dupa ce se termina instalarea intra inapoi pe proiect si scrie expo start --tunnel
