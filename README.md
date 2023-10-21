@@ -29,3 +29,11 @@ git merge origin/main
 2. scrie comanda:
    npm install -g expo-cli
 3. dupa ce se termina instalarea intra inapoi pe proiect si scrie expo start --tunnel
+
+# TASKURI
+
+Ioana - de facut git hub + README file cu comenzi |DONE| - de facut bara de jos - pagina setari - pagina articole
+
+Caty - pagina feed - pagina setari articole
+
+Ale - pagina planeta
