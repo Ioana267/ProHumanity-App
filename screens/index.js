@@ -7,6 +7,5 @@ export {
     Home,
     Articles,
     Settings,
-    Planet,
-    
+    Planet 
 }
