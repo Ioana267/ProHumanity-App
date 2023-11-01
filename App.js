@@ -1,11 +1,9 @@
-import {  Text, Platform,  View } from 'react-native';
-import { Home, Planet, Settings, Articles } from "./screens";
+import {  View } from 'react-native';
+import { Home, Articles,  Settings, Planet } from "./screens";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Entypo } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 
 // Thanks for watching
 const Tab =createBottomTabNavigator();
@@ -19,7 +17,7 @@ const screenOptions = {
     left: 0,
     elevation: 0,
     height: 85,
-    backgroundColor: "#c4edc4"
+    background: "#4f6f52"
   }
 }
 export default function App() {
@@ -33,7 +31,7 @@ export default function App() {
             tabBarIcon: ({focused})=>{
               return (
                 <View style={{alignItems: "center", justifyContent: "center"}}> 
-                  <Entypo name="home" size={30} color={focused ? "#4F6F52": "#111"} />
+                  <Entypo name="home" size={24} color={focused ? "#4f6f52": "#111"} />
                   
                 </View>
               )
@@ -47,21 +45,7 @@ export default function App() {
             tabBarIcon: ({focused})=>{
               return (
                 <View style={{alignItems: "center", justifyContent: "center"}}> 
-                 <Entypo name="globe" size={30} color={focused ? "#4F6F52": "#111"} />
-                  
-                </View>
-              )
-            }
-          }}
-          />
-          <Tab.Screen 
-          name="Articles" 
-          component={Articles} 
-          options={{
-            tabBarIcon: ({focused})=>{
-              return (
-                <View style={{alignItems: "center", justifyContent: "center"}}> 
-                 <Entypo name="book" size={30} color={focused ? "#4F6F52": "#111"} />
+                 <Entypo name="globe" size={24} color={focused ? "#4f6f52": "#111"} />
                   
                 </View>
               )
@@ -69,6 +53,20 @@ export default function App() {
           }}
           />
           
+          <Tab.Screen
+           name="Articles" 
+           component={Articles}
+           options={{
+            tabBarIcon: ({focused})=>{
+              return (
+                <View style={{alignItems: "center", justifyContent: "center"}}> 
+                 <Entypo name="book" size={24} color={focused ? "#4f6f52": "#111"} />
+                  
+            </View>
+              )
+            }
+          }}
+           />
           <Tab.Screen 
           name="Settings" 
           component={Settings} 
@@ -76,8 +74,7 @@ export default function App() {
             tabBarIcon: ({focused})=>{
               return (
                 <View style={{alignItems: "center", justifyContent: "center"}}> 
-                 <Ionicons name="settings" size={30}  color={focused ? "#4F6F52": "#111"} />
-                  
+                 <Ionicons name="settings" size={24}  color={focused ? "#4f6f52": "#111"} />
                 </View>
               )
             }
