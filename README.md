@@ -32,7 +32,7 @@ git merge origin/main
 
 # TASKURI
 
-Ioana - de facut git hub + README file cu comenzi |DONE| - de facut bara de jos - pagina setari - pagina articole
+Ioana - de facut git hub + README file cu comenzi |DONE| - de facut bara de jos |DONE| - pagina setari - pagina articole
 
 Caty - pagina feed - pagina setari articole
 
