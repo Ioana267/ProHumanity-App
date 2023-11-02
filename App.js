@@ -17,7 +17,7 @@ const screenOptions = {
     left: 0,
     elevation: 0,
     height: 85,
-    background: "#4f6f52"
+    backgroundColor: "#c4edc4"
   }
 }
 export default function App() {
