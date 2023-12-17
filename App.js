@@ -26,6 +26,32 @@ function ArticlesStack() {
         
       />
       <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerTitleStyle: styles.bigText,
+            header: () => (
+              <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+                <Text style={styles.bigText}> Settings</Text>
+              </SafeAreaView>
+            ),
+          }}
+        
+      />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerTitleStyle: styles.bigText,
+            header: () => (
+              <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+                <Text style={styles.bigText}> Home</Text>
+              </SafeAreaView>
+            ),
+          }}
+        
+      />
+      <Stack.Screen
         name="ArticleDetail"
         component={ArticleDetails} // Corrected component name here
         options={({ route }) => ({
