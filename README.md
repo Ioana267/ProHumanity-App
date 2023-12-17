@@ -34,6 +34,6 @@ git merge origin/main
 
 Ioana - de facut git hub + README file cu comenzi |DONE| - de facut bara de jos |DONE| - pagina setari - pagina articole |DONE|
 
-Caty - pagina feed - pagina setari articole
+Caty - pagina feed - pagina autentificare
 
 Ale - pagina planeta
