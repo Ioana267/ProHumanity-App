@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 3,
-    paddingBottom:3,
+    padding: 0,
+    paddingBottom:0,
     backgroundColor: '#c4edc4',
   },
   bigText: {
@@ -214,10 +214,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#c4edc4',
     height:40,
     //width: '100%', // Use '100%' to occupy the full width
-    paddingTop: 5,
+    paddingTop: 0,
     paddingLeft: 20,
     paddingRight:3,
-    paddingBottom:3,
+    paddingBottom:0,
     alignItems: 'center', // Add this line to vertically align the text
    
     
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   postButton: {
     //position: 'absolute',
     right: 20, // Adjust the right value to control the button's position
-    top: 5, // Adjust the top value to control the button's position
+    top: 0, // Adjust the top value to control the button's position
   },
   bottomRectangle: {
     height: 80, // Adjust the height as needed
