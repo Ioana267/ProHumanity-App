@@ -127,86 +127,100 @@ const Home = () => {
 
 
   return (
-
-    <ScrollView style={styles.container}>
-      <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
-        <View>
-          <Text style={styles.bigText}>Home</Text>
-        </View>
-        <View>
-          <IconButton
-            icon="plus-circle"
-            color="#000"
-            size={30}
-            onPress={handlePostPress}
-            style={styles.postButton} // Apply styles to the button
-          />
-        </View>
-      </SafeAreaView>
-
-      <LevelStatus level={level} xp={xp} />
-      {posts.map((post) => (
-        <View key={post.id} style={[styles.postContainer, index === posts.length - 1 && styles.lastPost]}>
-          <Avatar.Text
-            size={40}
-            label={users.find((user) => user.id === post.userId).name[0]}
-          />
-          <View style={styles.postContent}>
-            <Title>{users.find((user) => user.id === post.userId).name}</Title>
-            <List.Item title={post.text} />
-            {post.photo && (
-              <Image source={{ uri: post.photo }} style={styles.postPhoto} />
-            )}
-            <View style={styles.actionsContainer}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <View >
+            <Text style={styles.bigText}>Home</Text>
+          </View>
+          <View style={styles.header}>
               <IconButton
-                icon="thumb-up"
-                color={post.reactions && post.reactions['like'] > 0 ? 'blue' : 'grey'}
-                size={20}
-                onPress={() => handleReact(post.id, 'like')}
+                icon="plus-circle"
+                color="#000"
+                size={30}
+                onPress={handlePostPress}
+                style={styles.postButton} // Apply styles to the button
               />
-              <IconButton
-                icon="heart"
-                color={post.reactions && post.reactions['love'] > 0 ? 'red' : 'grey'}
-                size={20}
-                onPress={() => handleReact(post.id, 'love')}
-              />
-              <IconButton
-                icon="star"
-                color={post.reactions && post.reactions['wow'] > 0 ? 'orange' : 'grey'}
-                size={20}
-                onPress={() => handleReact(post.id, 'wow')}
-              />
-              {/* Replace the existing TextInput and Button with the Comment component */}
-              <Comment postId={post.id} onCommentSubmit={handleCommentSubmit} />
-            </View>
-            <View style={styles.commentsContainer}>
-              {post.comments.map((comment) => (
-                <List.Item key={comment.id} title={comment.text} />
-              ))}
-            </View>
           </View>
         </View>
-      ))}
-      <View style={styles.bottomRectangle}></View>
-    </ScrollView>
+      <ScrollView style={{ backgroundColor: '#ecf9ec',}}>
+          
+        <LevelStatus level={level} xp={xp} />
+        {posts.map((post) => (
+          <View key={post.id} style={[styles.postContainer, index === posts.length - 1 && styles.lastPost]}>
+            <Avatar.Text
+              size={40}
+              label={users.find((user) => user.id === post.userId).name[0]}
+            />
+            <View style={styles.postContent}>
+              <Title>{users.find((user) => user.id === post.userId).name}</Title>
+              <List.Item title={post.text} />
+              {post.photo && (
+                <Image source={{ uri: post.photo }} style={styles.postPhoto} />
+              )}
+              <View style={styles.actionsContainer}>
+                <IconButton
+                  icon="thumb-up"
+                  color={post.reactions && post.reactions['like'] > 0 ? 'blue' : 'grey'}
+                  size={20}
+                  onPress={() => handleReact(post.id, 'like')}
+                />
+                <IconButton
+                  icon="heart"
+                  color={post.reactions && post.reactions['love'] > 0 ? 'red' : 'grey'}
+                  size={20}
+                  onPress={() => handleReact(post.id, 'love')}
+                />
+                <IconButton
+                  icon="star"
+                  color={post.reactions && post.reactions['wow'] > 0 ? 'orange' : 'grey'}
+                  size={20}
+                  onPress={() => handleReact(post.id, 'wow')}
+                />
+                {/* Replace the existing TextInput and Button with the Comment component */}
+                <Comment postId={post.id} onCommentSubmit={handleCommentSubmit} />
+              </View>
+              <View style={styles.commentsContainer}>
+                {post.comments.map((comment) => (
+                  <List.Item key={comment.id} title={comment.text} />
+                ))}
+              </View>
+            </View>
+          </View>
+        ))}
+        <View style={styles.bottomRectangle}></View>
+
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ecf9ec',
+    //flex: 1,
+    backgroundColor: '#c4edc4',
     
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 3,
+    paddingBottom:3,
+    backgroundColor: '#c4edc4',
   },
   bigText: {
     fontSize: 35,
     fontWeight: 'bold',
     backgroundColor: '#c4edc4',
-    height: 80,
-    width: '100%', // Use '100%' to occupy the full width
-    paddingTop: 30,
+    height:40,
+    //width: '100%', // Use '100%' to occupy the full width
+    paddingTop: 5,
     paddingLeft: 20,
+    paddingRight:3,
+    paddingBottom:3,
     alignItems: 'center', // Add this line to vertically align the text
+   
+    
   },
   postContainer: {
     flexDirection: 'row',
@@ -236,9 +250,9 @@ const styles = StyleSheet.create({
     marginBottom: 100, // Adjust the value based on the desired space after the last post
   },
   postButton: {
-    position: 'absolute',
+    //position: 'absolute',
     right: 20, // Adjust the right value to control the button's position
-    top: 30, // Adjust the top value to control the button's position
+    top: 5, // Adjust the top value to control the button's position
   },
   bottomRectangle: {
     height: 80, // Adjust the height as needed
