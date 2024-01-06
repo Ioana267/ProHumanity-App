@@ -22,8 +22,55 @@ const AdvancedSettingsScreen = () => (
 
 const PrivacyPolicyScreen = () => (
   <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
-    {/* Pagina EditProfile */}
-    <Text style={styles.bigText}>Privacy and Policy </Text>
+    <Text style={styles.bigText}>Privacy Policy </Text>
+    <ScrollView style={{ backgroundColor: '#fff',paddingLeft:20,paddingRight:20 }}>
+      
+      <Text style={{fontSize:17,paddingBottom:100}}>
+      <Text style={{ fontWeight: 'bold' }}>Last updated:</Text> 1/6/2024 {'\n'}
+        {'\n'}
+        Welcome to ProHumanity, an app created to [provide a brief description of the app's purpose and functionality]. This Privacy Policy outlines how we collect, use, disclose, and safeguard your personal information. By using the ProHumanity app, you agree to the terms outlined in this policy. {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>Information We Collect {'\n'} </Text>
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>1. Account Information  {'\n'} </Text>
+        When you sign up for ProHumanity, we collect the following information: {'\n'}
+
+        - Full name {'\n'}
+        - Email address {'\n'}
+        - Password {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>2. Photos {'\n'} </Text>
+        ProHumanity allows you to upload and share photos. By using this feature, you grant us permission to access, store, and process your photos. {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>How We Use Your Information {'\n'} </Text>
+        We use the collected information for the following purposes: {'\n'}
+
+        - To create and manage your ProHumanity account {'\n'}
+        - To enable you to log in and use the app's features {'\n'}
+        - To enhance user experience and personalize content {'\n'}
+        - To improve our app and services {'\n'}
+        - To communicate with you regarding updates, news, and promotions {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>Data Security {'\n'} </Text>
+        We take reasonable measures to protect your personal information from unauthorized access, disclosure, alteration, and destruction. However, please be aware that no method of transmission over the internet or electronic storage is completely secure. {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>Sharing Your Information {'\n'} </Text>
+        We do not sell, trade, or rent your personal information to third parties. We may share your information in the following cases: {'\n'}
+      
+        - With your consent {'\n'}
+        - To comply with legal obligations {'\n'}
+        - To protect our rights, privacy, safety, or property {'\n'}
+        - Your Choices {'\n'}
+        - You can manage your account settings and preferences within the ProHumanity app. You may also opt-out of promotional communications by following the instructions provided in the emails. {'\n'}
+        {'\n'}
+       
+        <Text style={{ fontWeight: 'bold' }}>Changes to this Privacy Policy  {'\n'} </Text>
+        We reserve the right to update this Privacy Policy at any time. We will notify you of any changes by posting the new policy on this page.  {'\n'}
+        {'\n'}
+        <Text style={{ fontWeight: 'bold' }}>Contact Us {'\n'} </Text>
+        If you have any questions about these Terms, please contact us at code4futuretechno@gmail.com.{'\n'}
+      </Text>
+    </ScrollView>
   </SafeAreaView>
 );
 
