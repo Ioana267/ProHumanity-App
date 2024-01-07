@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image, TextInput,Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,6 +7,7 @@ import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
 import LandingPage from './screens/LandingPage';
+//import firebase from '.\firebase.js';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +21,142 @@ const SettingsStack = () => (
     <Stack.Screen name="Logout" component={Logout} />
   </Stack.Navigator>
 );
+const SignUp = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  {/*const handleSignUp = async () => {
+    try {
+      await auth().createUserWithEmailAndPassword(email, password);
+      // Navigate to the desired screen upon successful sign-up
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error signing up:', error.message);
+    }
+ };*/}
+ const handleSignUp = async () => {
+  // Perform sign-in logic, e.g., using Firebase authentication
+  // If sign-in is successful, navigate to Home
+  try {
+    // Your sign-in logic here, for example with Firebase
+    // await firebase.auth().signInWithEmailAndPassword(email, password);
+
+    // After successful sign-in, navigate to Home
+    navigation.navigate('Home');
+  } catch (error) {
+    console.error('Sign-Up error:', error.message);
+  }
+};
+
+  return (
+    <View style={styles.signin}>
+      <Text style={styles.title}>Sign Up</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+        onChangeText={(text) => setPassword(text)}
+        value={password}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        secureTextEntry
+        onChangeText={(text) => setConfirmPassword(text)}
+        value={confirmPassword}
+      />
+
+      <TouchableOpacity
+        onPress={handleSignUp}
+        style={[styles.link, { marginTop: 16 }, {marginBottom:30},]}
+      >
+        <Text style={styles.linkText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.loginText}>
+        Already have an account?{' '}
+        <Text style={styles.link} onPress={() => navigation.navigate('SignIn')}>
+          Sign In
+        </Text>
+      </Text>
+    </View>
+  );
+};
+const SignIn = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+ {/* const handleSignIn = async () => {
+    try {
+      await auth().signInWithEmailAndPassword(email, password);
+      // Navigate to the desired screen upon successful sign-in
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error signing in:', error.message);
+    }
+  }; */}
+
+  const handleSignIn = async () => {
+    // Perform sign-in logic, e.g., using Firebase authentication
+    // If sign-in is successful, navigate to Home
+    try {
+      // Your sign-in logic here, for example with Firebase
+      // await firebase.auth().signInWithEmailAndPassword(email, password);
+
+      // After successful sign-in, navigate to Home
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Sign-in error:', error.message);
+    }
+  };
+
+  return (
+    <View style={styles.signin}>
+      <Text style={styles.title}>Sign In</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+        onChangeText={(text) => setPassword(text)}
+        value={password}
+      />
+
+       <TouchableOpacity
+        onPress={handleSignIn}
+        style={[styles.link, { marginTop: 16 }, {marginBottom:30},]}
+      >
+        <Text style={styles.linkText}>Sign In</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.registerText}>
+        Don't have an account?{' '}
+        <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
+          Sign Up
+        </Text>
+      </Text>
+    </View>
+  );
+};
 
 const screenOptions = {
   tabBarShowLabel: false,
@@ -51,8 +188,6 @@ function ArticleDetails({ route }) {
 function ArticlesStack() {
   return (
     <Stack.Navigator>
-      
-      
       <Stack.Screen
         name="Articles"
         component={Articles}
@@ -109,20 +244,23 @@ function ArticlesStack() {
 export default function App() {
   const [showLandingPage, setShowLandingPage] = React.useState(true);
 
-  useEffect(() => {
+  /*useEffect(() => {
     // Conditionally navigate to the main tab navigator after some delay
     const timer = setTimeout(() => {
       setShowLandingPage(false);
     }, 4000); // Change the delay as needed
 
     return () => clearTimeout(timer);
-  }, []);
+  }, []);*/
 
   return (
     <NavigationContainer>
       {showLandingPage ? (
         <Stack.Navigator initialRouteName="LandingPage" headerMode="none">
           <Stack.Screen name="LandingPage" component={LandingPage} />
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       ) : (
         <Tab.Navigator screenOptions={screenOptions}>
@@ -170,6 +308,7 @@ export default function App() {
               ),
             }}
           />
+
         </Tab.Navigator>
       )}
     </NavigationContainer>
@@ -213,6 +352,36 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 20,
     borderRadius: 10,
+  },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+    },
+    input: {
+      height: 40,
+      width: '100%',
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginBottom: 12,
+      paddingLeft: 8,
+    },
+    registerText: {
+      marginTop: 16,
+    },
+    link: {
+        backgroundColor: '#c4edc4',
+        padding: 10,
+        width: '50%', // Adjust the width as needed
+        alignItems: 'center',
+        
+  },
+  signin: {
+    flex: 1,
+    backgroundColor:'#ecf9ec',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
   },
 });
 
