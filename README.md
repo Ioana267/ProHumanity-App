@@ -32,8 +32,12 @@ git merge origin/main
 
 # TASKURI
 
-Ioana - de facut git hub + README file cu comenzi |DONE| - de facut bara de jos |DONE| - pagina setari - pagina articole |DONE|
+A ramas sa:
+1. log in/sign in
+2. pagina planeta
+3. conectat la baza de date pentru a:
+    - face butonul ptr postari
+    - termina pagina setari
+4. conectare cu XP
 
-Caty - pagina feed - pagina autentificare
 
-Ale - pagina planeta
