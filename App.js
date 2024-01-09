@@ -1,17 +1,42 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image, TextInput,Button, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  Image,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
+
+// Import your screens
+import {
+  Home,
+  Settings,
+  Planet,
+  Articles,
+  EditProfile,
+  AdvancedSettings,
+  PrivacyPolicy,
+  TermsOfService,
+  Logout,
+} from './screens';
+
 import LandingPage from './screens/LandingPage';
-//import firebase from '.\firebase.js';
+import Post from './screens/Post';
+import * as ImagePicker from 'expo-image-picker';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Moved outside the App component to avoid unnecessary re-renders
 const SettingsStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="EditProfile" component={EditProfile} />
@@ -26,28 +51,18 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  {/*const handleSignUp = async () => {
+  const handleSignUp = async () => {
+    // Perform sign-in logic, e.g., using Firebase authentication
+    // If sign-in is successful, navigate to Home
     try {
-      await auth().createUserWithEmailAndPassword(email, password);
-      // Navigate to the desired screen upon successful sign-up
-      navigation.navigate('Home');
-    } catch (error) {
-      console.error('Error signing up:', error.message);
-    }
- };*/}
- const handleSignUp = async () => {
-  // Perform sign-in logic, e.g., using Firebase authentication
-  // If sign-in is successful, navigate to Home
-  try {
-    // Your sign-in logic here, for example with Firebase
-    // await firebase.auth().signInWithEmailAndPassword(email, password);
+      // Your sign-in logic here, for example with Firebase
+      // await firebase.auth().signInWithEmailAndPassword(email, password);
 
-    // After successful sign-in, navigate to Home
-    navigation.navigate('Home');
-  } catch (error) {
-    console.error('Sign-Up error:', error.message);
-  }
-};
+      navigation.navigate('UsernameSetup');
+    } catch (error) {
+      console.error('Sign-Up error:', error.message);
+    }
+  };
 
   return (
     <View style={styles.signin}>
@@ -76,9 +91,10 @@ const SignUp = ({ navigation }) => {
         value={confirmPassword}
       />
 
+
       <TouchableOpacity
         onPress={handleSignUp}
-        style={[styles.link, { marginTop: 16 }, {marginBottom:30},]}
+        style={[styles.link, { marginTop: 16 }, { marginBottom: 30 },]}
       >
         <Text style={styles.linkText}>Sign Up</Text>
       </TouchableOpacity>
@@ -91,20 +107,72 @@ const SignUp = ({ navigation }) => {
       </Text>
     </View>
   );
+
 };
+
+const UsernameSetup = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+
+  const handleUsernameChange = (text) => {
+    setUsername(text);
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setProfilePicture(result.uri);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log('Username:', username);
+    console.log('Profile Picture:', profilePicture);
+    setUsername('');
+    setProfilePicture('');
+    navigation.navigate('Home');
+  };
+
+  return (
+    <View style={styles.signin}>
+      <View style={styles.content}>
+        <TouchableOpacity
+          onPress={pickImage}
+          style={[styles.circularButton, profilePicture && { display: 'none' }]}
+        >
+          <Text style={styles.buttonText}>Pick Picture</Text>
+        </TouchableOpacity>
+
+        {profilePicture && (
+          <Image source={{ uri: profilePicture }} style={styles.previewImage} />
+        )}
+      </View>
+      <View style={styles.content}>
+        <Text style={styles.label}>Username:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your username"
+          value={username}
+          onChangeText={handleUsernameChange}
+          required
+        />
+      </View>
+      <TouchableOpacity onPress={handleSubmit} style={[styles.link, styles.button]}>
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
- {/* const handleSignIn = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-      // Navigate to the desired screen upon successful sign-in
-      navigation.navigate('Home');
-    } catch (error) {
-      console.error('Error signing in:', error.message);
-    }
-  }; */}
 
   const handleSignIn = async () => {
     // Perform sign-in logic, e.g., using Firebase authentication
@@ -141,9 +209,9 @@ const SignIn = ({ navigation }) => {
         value={password}
       />
 
-       <TouchableOpacity
+      <TouchableOpacity
         onPress={handleSignIn}
-        style={[styles.link, { marginTop: 16 }, {marginBottom:30},]}
+        style={[styles.link, { marginTop: 16 }, { marginBottom: 30 }]}
       >
         <Text style={styles.linkText}>Sign In</Text>
       </TouchableOpacity>
@@ -167,7 +235,7 @@ const screenOptions = {
     right: 0,
     left: 0,
     elevation: 0,
-    height: 85,
+    height: 60,
     backgroundColor: '#c4edc4',
   },
 };
@@ -178,7 +246,7 @@ function ArticleDetails({ route }) {
   return (
     <View style={styles.bigDiv}>
       <ScrollView>
-        <Image style={styles.imageStyle} source={article.image} />
+        <Image style={styles.imageStyle} source={article.source} />
         <Text style={styles.contentsStyle}>{article.content}</Text>
       </ScrollView>
     </View>
@@ -224,8 +292,6 @@ function ArticlesStack() {
           ),
         }}
       />
-
-
       <Stack.Screen
         name="ArticleDetail"
         component={ArticleDetails}
@@ -240,80 +306,68 @@ function ArticlesStack() {
     </Stack.Navigator>
   );
 }
-
+const HomeTabNavigator = () => (
+  <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Screen
+      name="Home"
+      component={Home}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Entypo name="home" size={24} color={focused ? '#4f6f52' : '#111'} />
+          </View>
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Planet"
+      component={Planet}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Entypo name="globe" size={24} color={focused ? '#4f6f52' : '#111'} />
+          </View>
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Articles"
+      component={ArticlesStack}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Entypo name="book" size={24} color={focused ? '#4f6f52' : '#111'} />
+          </View>
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Settings"
+      component={Settings}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="settings" size={24} color={focused ? '#4f6f52' : '#111'} />
+          </View>
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 export default function App() {
   const [showLandingPage, setShowLandingPage] = React.useState(true);
-
-  /*useEffect(() => {
-    // Conditionally navigate to the main tab navigator after some delay
-    const timer = setTimeout(() => {
-      setShowLandingPage(false);
-    }, 4000); // Change the delay as needed
-
-    return () => clearTimeout(timer);
-  }, []);*/
-
   return (
     <NavigationContainer>
-      {showLandingPage ? (
-        <Stack.Navigator initialRouteName="LandingPage" headerMode="none">
-          <Stack.Screen name="LandingPage" component={LandingPage} />
-          <Stack.Screen name="SignIn" component={SignIn} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="Home" component={Home} />
-        </Stack.Navigator>
-      ) : (
-        <Tab.Navigator screenOptions={screenOptions}>
-          <Tab.Screen
-            name="Home"
-            component={Home}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                  <Entypo name="home" size={24} color={focused ? '#4f6f52' : '#111'} />
-                </View>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Planet"
-            component={Planet}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                  <Entypo name="globe" size={24} color={focused ? '#4f6f52' : '#111'} />
-                </View>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Articles"
-            component={ArticlesStack}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                  <Entypo name="book" size={24} color={focused ? '#4f6f52' : '#111'} />
-                </View>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={Settings}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                  <Ionicons name="settings" size={24} color={focused ? '#4f6f52' : '#111'} />
-                </View>
-              ),
-            }}
-          />
-
-        </Tab.Navigator>
-      )}
+      <Stack.Navigator initialRouteName="LandingPage" headerMode="none">
+        <Stack.Screen name="LandingPage" component={LandingPage} />
+        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="UsernameSetup" component={UsernameSetup} />
+        <Stack.Screen name="Home" component={HomeTabNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   bigText: {
@@ -353,35 +407,51 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
   },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 20,
-    },
-    input: {
-      height: 40,
-      width: '100%',
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 12,
-      paddingLeft: 8,
-    },
-    registerText: {
-      marginTop: 16,
-    },
-    link: {
-        backgroundColor: '#c4edc4',
-        padding: 10,
-        width: '50%', // Adjust the width as needed
-        alignItems: 'center',
-        
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    width: '100%',
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingLeft: 8,
+  },
+  registerText: {
+    marginTop: 16,
+  },
+  link: {
+    backgroundColor: '#c4edc4',
+    padding: 10,
+    width: '50%', // Adjust the width as needed
+    alignItems: 'center',
+
   },
   signin: {
     flex: 1,
-    backgroundColor:'#ecf9ec',
+    backgroundColor: '#ecf9ec',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+  },
+  previewImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+
+  circularButton: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#4f6f52',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
