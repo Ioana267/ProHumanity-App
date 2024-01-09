@@ -2,48 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image } from 'react-native';
 import { Avatar, Title, IconButton, TextInput, Button, List, index } from 'react-native-paper';
 import LevelStatus from './LevelStatus'; // Import the LevelStatus component
-//import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Comment from './Comment';
 
-
-/*const Post = ({ picture, description, reactions, comments, onReact, onComment }) => {
-  const [newComment, setNewComment] = useState('');
-  const navigation = useNavigation();
-  const navigateToScreen = (screen) => {
-    navigation.navigate(screen);
-  }
-  return (
-    
-    <div>
-      <img src={picture} alt="Post" style={{ maxWidth: '100%' }} />
-      <p>{description}</p>
-      <button onClick={onReact}>React ({reactions})</button>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Add a comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button onClick={() => onComment(newComment)}>Comment</button>
-      </div>
-
-      <div>
-        <h4>Comments</h4>
-        {comments.map((comment, index) => (
-          <p key={index}>{comment}</p>
-        ))}
-      </div>
-    </div>
-
-  );
-};*/
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [level, setLevel] = useState(1); // Example level state
   const [xp, setXP] = useState(1000); // Example XP state
+  const [newPostText, setNewPostText] = useState('');
+  const [newPostPhoto, setNewPostPhoto] = useState('');
+  const navigation = useNavigation();
 
   // Example user and post data
   const users = [
@@ -80,6 +49,13 @@ const Home = () => {
     },
     // Add more posts as needed
   ];
+  const handlePostPress = () => {
+    // Implement the logic to handle the press event for posting
+    // For example, you can navigate to the Post screen or show a modal
+    console.log('Post button pressed');
+    navigation.navigate('Post');
+
+  };
 
   useEffect(() => {
     // Set the initial state with example posts
@@ -119,10 +95,6 @@ const Home = () => {
       )
     );
   };
-  const handlePostPress = () => {
-    navigation.navigate('Post');
-  };
-  const [buttonColor, setButtonColor] = useState('blue'); // Set the initial color
 
 
 
