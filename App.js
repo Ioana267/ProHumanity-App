@@ -7,6 +7,7 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
   doc,
   setDoc,
   updateDoc,
@@ -62,6 +63,9 @@ export default function App() {
         const currentUser = auth.currentUser;
 
         if (currentUser) {
+          // Update the user state
+          setUser(currentUser);
+
           const querySnapshot = await getDocs(collection(firestore, 'Users'));
           querySnapshot.forEach((doc) => {
             console.log(currentUser.uid, ' => ', doc.data());
@@ -73,7 +77,7 @@ export default function App() {
     };
 
     fetchDataFromFirestore();
-  }, [user]);
+  }, []); // No need to include [user] in the dependency array
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LandingPage" screenOptions={stackOptions}>
@@ -335,43 +339,55 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const handlePost = async () => {
+    console.log('handlePost function called');  // Add this line
     try {
       // Check if user is authenticated
       if (!user) {
         console.error('User not authenticated.');
         return;
       }
-
+  
       // Fetch user details from Firestore based on userId
       const userDocRef = firestoreDoc(firestore, 'Users', user.uid);
       const userDocSnapshot = await getDoc(userDocRef);
-
+  
       if (!userDocSnapshot.exists()) {
         console.error('User data not found.');
         return;
       }
-
+  
       const userData = userDocSnapshot.data();
-
+      const userId = user.uid;
+  
+      if (!userId) {
+        console.error('User ID is undefined.');
+        return;
+      }
+  
+      console.log('User ID:', userId);
+      console.log('Username:', userData.username);
+      console.log('Profile Picture:', userData.profilePicture);
+      console.log('Photo:', photo);
+      console.log('Description:', description);
+      console.log('Task:', task);
+  
       // Add logic to post to Firestore
       const postDocRef = collection(firestore, 'Posts');
       await setDoc(doc(postDocRef), {
+        userId,
+        username: userData.username,
+        profilePicture: userData.profilePicture,
         photo,
         description,
         task,
         timestamp: serverTimestamp(),
       });
-      await setDoc(doc(userDocRef), {
-        userId: user.uid,
-        username: userData.username,
-        profilePicture: userData.profilePicture,
-      });
-
+  
       // Clear the fields after posting
       setPhoto('');
       setDescription('');
       setTask('');
-
+  
       // Navigate back to the Home screen
       navigation.goBack();
     } catch (error) {
