@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView,ScrollView, TouchableOpacity,Paragraph } from 'react-native';
+import { View, Text, Image, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Paragraph, TextInput } from 'react-native';
+import { getAuth, updateProfile } from 'firebase/auth';
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const EditProfileScreen = () => (
   <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
@@ -23,10 +25,10 @@ const AdvancedSettingsScreen = () => (
 const PrivacyPolicyScreen = () => (
   <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
     <Text style={styles.bigText}>Privacy Policy </Text>
-    <ScrollView style={{ backgroundColor: '#fff',paddingLeft:20,paddingRight:20 }}>
-      
-      <Text style={{fontSize:17,paddingBottom:100}}>
-      <Text style={{ fontWeight: 'bold' }}>Last updated:</Text> 1/6/2024 {'\n'}
+    <ScrollView style={{ backgroundColor: '#fff', paddingLeft: 20, paddingRight: 20 }}>
+
+      <Text style={{ fontSize: 17, paddingBottom: 100 }}>
+        <Text style={{ fontWeight: 'bold' }}>Last updated:</Text> 1/6/2024 {'\n'}
         {'\n'}
         Welcome to ProHumanity, an app created to [provide a brief description of the app's purpose and functionality]. This Privacy Policy outlines how we collect, use, disclose, and safeguard your personal information. By using the ProHumanity app, you agree to the terms outlined in this policy. {'\n'}
         {'\n'}
@@ -56,14 +58,14 @@ const PrivacyPolicyScreen = () => (
         {'\n'}
         <Text style={{ fontWeight: 'bold' }}>Sharing Your Information {'\n'} </Text>
         We do not sell, trade, or rent your personal information to third parties. We may share your information in the following cases: {'\n'}
-      
+
         - With your consent {'\n'}
         - To comply with legal obligations {'\n'}
         - To protect our rights, privacy, safety, or property {'\n'}
         - Your Choices {'\n'}
         - You can manage your account settings and preferences within the ProHumanity app. You may also opt-out of promotional communications by following the instructions provided in the emails. {'\n'}
         {'\n'}
-       
+
         <Text style={{ fontWeight: 'bold' }}>Changes to this Privacy Policy  {'\n'} </Text>
         We reserve the right to update this Privacy Policy at any time. We will notify you of any changes by posting the new policy on this page.  {'\n'}
         {'\n'}
@@ -77,9 +79,9 @@ const PrivacyPolicyScreen = () => (
 const TermsOfServiceScreen = () => (
   <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
     <Text style={styles.bigText}>Terms of Service </Text>
-    <ScrollView style={{ backgroundColor: '#fff',paddingLeft:20,paddingRight:20 }}>
-      
-      <Text style={{fontSize:17,paddingBottom:100}}>
+    <ScrollView style={{ backgroundColor: '#fff', paddingLeft: 20, paddingRight: 20 }}>
+
+      <Text style={{ fontSize: 17, paddingBottom: 100 }}>
         {'\n'}
         <Text style={{ fontWeight: 'bold' }}>Terms of Service for ProHumanity{'\n'}</Text>
         {'\n'}
@@ -127,7 +129,7 @@ const TermsOfServiceScreen = () => (
       </Text>
     </ScrollView>
   </SafeAreaView>
- 
+
 );
 
 const LogoutScreen = () => (
@@ -138,11 +140,36 @@ const LogoutScreen = () => (
 );
 
 const Settings = () => {
-  const [name, setName] = useState('John Doe');
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [username, setUsername] = useState(user?.displayName || '');
+  const [profilePicture, setProfilePicture] = useState(user?.photoURL || '');
   const navigation = useNavigation();
 
   const navigateToScreen = (screen) => {
     navigation.navigate(screen);
+  };
+  const handleSave = async () => {
+    try {
+      if (user) {
+        // Update user profile
+        await updateProfile(user, {
+          displayName: username,
+          photoURL: profilePicture,
+        });
+
+        // Update Firestore document
+        const userDocRef = doc(getFirestore(), 'Users', user.uid);
+        await updateDoc(userDocRef, {
+          username,
+          profilePicture,
+        });
+
+        console.log('Profile updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+    }
   };
 
   return (
@@ -157,16 +184,12 @@ const Settings = () => {
             <View style={styles.row}>
               <Image
                 style={styles.profilePicture}
-                source={require('./articleImage1.jpg')}
+                source={{ uri: profilePicture || user?.photoURL }}
               />
             </View>
             <View style={styles.row}>
-              <Text
-                style={styles.nameStyle}
-                value={name}
-                onChangeText={(text) => setName(text)}
-              >
-                {name}
+              <Text style={styles.nameStyle}>
+                {username || user?.displayName}
               </Text>
             </View>
           </View>
@@ -205,23 +228,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf9ec',
   },
   bottomTextContainer: {
-    marginLeft:140,
+    marginLeft: 140,
     bottom: 0,
     left: 0,
     right: 0,
-    
+
     padding: 10,
-   
+
   },
-  dividers:{
+  dividers: {
     fontSize: 19,
     paddingLeft: 15,
   },
   burgers: {
-    backgroundColor:"#cce6cc",
-    paddingTop:12,
-    paddingBottom:12,
-    borderColor:"#fff",
+    backgroundColor: "#cce6cc",
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderColor: "#fff",
     marginVertical: 1,
   },
   bigText: {
@@ -237,9 +260,9 @@ const styles = StyleSheet.create({
   },
   nameStyle: {
     fontWeight: 'bold',
-    fontSize:24,
+    fontSize: 24,
     color: '#026440',
-    marginLeft:135,
+    marginLeft: 135,
   },
   sectionTitle: {
     fontSize: 20,
@@ -267,7 +290,7 @@ const styles = StyleSheet.create({
     height: 150,
     marginLeft: 10,
     borderRadius: 100,
-    marginLeft:120,
+    marginLeft: 120,
   },
 });
 
