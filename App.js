@@ -12,6 +12,7 @@ import {
   updateDoc,
   serverTimestamp,
 } from 'firebase/firestore';
+import { doc as firestoreDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,7 +22,7 @@ import LandingPage from './screens/LandingPage';
 import Post from './screens/Post';
 import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
 import * as ImagePicker from 'expo-image-picker';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image,  TextInput, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image,  TextInput, TouchableOpacity, FlatList } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -81,7 +82,7 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="UsernameSetup" component={UsernameSetup} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />
-        <Stack.Screen name="Post" component={Post} />
+        <Stack.Screen name="Post" component={CreatePostScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -312,6 +313,104 @@ const SignIn = ({ navigation }) => {
     </View>
   );
 };
+const CreatePostScreen = ({ navigation }) => {
+  const [photo, setPhoto] = useState('');
+  const [description, setDescription] = useState('');
+  const [task, setTask] = useState('');
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setPhoto(result.uri);
+    }
+  };
+
+  const handlePost = async () => {
+    try {
+      // Check if user is authenticated
+      if (!user) {
+        console.error('User not authenticated.');
+        return;
+      }
+
+      // Fetch user details from Firestore based on userId
+      const userDocRef = firestoreDoc(firestore, 'Users', user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (!userDocSnapshot.exists()) {
+        console.error('User data not found.');
+        return;
+      }
+
+      const userData = userDocSnapshot.data();
+
+      // Add logic to post to Firestore
+      const postDocRef = collection(firestore, 'Posts');
+      await setDoc(doc(postDocRef), {
+        photo,
+        description,
+        task,
+        timestamp: serverTimestamp(),
+      });
+      await setDoc(doc(userDocRef), {
+        userId: user.uid,
+        username: userData.username,
+        profilePicture: userData.profilePicture,
+      });
+
+      // Clear the fields after posting
+      setPhoto('');
+      setDescription('');
+      setTask('');
+
+      // Navigate back to the Home screen
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error creating post:', error.message);
+    }
+  };
+
+  return (
+    <View style={styles.createPostContainer} >
+      <TouchableOpacity onPress={pickImage} style={styles.photoContainer}>
+        {photo ? (
+          <Image source={{ uri: photo }} style={styles.squarePhotoContainer} />
+        ) : (
+          <View style={styles.placeholderImage}>
+            <Text style={styles.placeholderText}>Pick a Photo</Text>
+          </View>
+        )}
+      </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Description"
+        onChangeText={(text) => setDescription(text)}
+        value={description}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Task"
+        onChangeText={(text) => setTask(text)}
+        value={task}
+      />
+
+      <TouchableOpacity onPress={handlePost} style={styles.post2Button}>
+        <Text style={styles.buttonText}>Post</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const screenOptions = {
   tabBarShowLabel: false,
@@ -444,6 +543,20 @@ const HomeTabNavigator = () => (
 
 
 const styles = StyleSheet.create({
+  previewImage: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  createPostContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#ecf9ec', 
+  },
   bigText: {
     fontSize: 35,
     fontWeight: 'bold',
@@ -458,6 +571,32 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     borderRadius: 10,
+  },
+  photoContainer: {
+    backgroundColor: '#ccc', // Gray square background color
+    width: 250,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderRadius: 10, // Set the borderRadius to make it a rounded square
+    overflow: 'hidden', // Clip the content to the rounded shape
+  },
+  squarePhotoContainer: {
+    backgroundColor: '#ccc',
+    width: 250,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  post2Button: {
+    backgroundColor: '#c4edc4', // Set button color
+    padding: 10,
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 16,
   },
   contentsStyle: {
     paddingLeft: 30,
