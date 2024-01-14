@@ -23,7 +23,7 @@ import LandingPage from './screens/LandingPage';
 import Post from './screens/Post';
 import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
 import * as ImagePicker from 'expo-image-picker';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image,  TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image,  TextInput, TouchableOpacity } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,9 +63,6 @@ export default function App() {
         const currentUser = auth.currentUser;
 
         if (currentUser) {
-          // Update the user state
-          setUser(currentUser);
-
           const querySnapshot = await getDocs(collection(firestore, 'Users'));
           querySnapshot.forEach((doc) => {
             console.log(currentUser.uid, ' => ', doc.data());
@@ -77,7 +74,7 @@ export default function App() {
     };
 
     fetchDataFromFirestore();
-  }, []); // No need to include [user] in the dependency array
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LandingPage" screenOptions={stackOptions}>
@@ -168,7 +165,7 @@ const SignUp = ({ navigation }) => {
 
       <Text style={styles.loginText}>
         Already have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('SignIn')}>
+        <Text style={styles.small} onPress={() => navigation.navigate('SignIn')}>
           Sign In
         </Text>
       </Text>
@@ -245,7 +242,7 @@ const UsernameSetup = ({ navigation }) => {
         </TouchableOpacity>
 
         {profilePicture && (
-          <Image source={{ uri: profilePicture }} style={styles.previewImage} />
+          <Image source={{ uri: profilePicture }} style={styles.circularProfilePicture} />
         )}
       </View>
       <View style={styles.content}>
@@ -310,13 +307,14 @@ const SignIn = ({ navigation }) => {
 
       <Text style={styles.registerText}>
         Don't have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
+        <Text style={styles.small} onPress={() => navigation.navigate('SignUp')}>
           Sign Up
         </Text>
       </Text>
     </View>
   );
 };
+
 const CreatePostScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState('');
   const [description, setDescription] = useState('');
@@ -421,7 +419,7 @@ const CreatePostScreen = ({ navigation }) => {
         value={task}
       />
 
-      <TouchableOpacity onPress={handlePost} style={styles.post2Button}>
+      <TouchableOpacity onPress={handlePost} style={styles.button}>
         <Text style={styles.buttonText}>Post</Text>
       </TouchableOpacity>
     </View>
@@ -437,8 +435,8 @@ const screenOptions = {
     right: 0,
     left: 0,
     elevation: 0,
-    height: 60,
-    backgroundColor: '#c4edc4',
+    height: 75,
+    backgroundColor: '#3C683E',
   },
 };
 
@@ -448,7 +446,7 @@ function ArticleDetails({ route }) {
   return (
     <View style={styles.bigDiv}>
       <ScrollView>
-        <Image style={styles.imageStyle} source={article.source} />
+        <Image style={styles.imageStyle} source={article.image} />
         <Text style={styles.contentsStyle}>{article.content}</Text>
       </ScrollView>
     </View>
@@ -464,7 +462,7 @@ function ArticlesStack() {
         options={{
           headerTitleStyle: styles.bigText,
           header: () => (
-            <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
               <Text style={styles.bigText}> Articles</Text>
             </SafeAreaView>
           ),
@@ -476,7 +474,7 @@ function ArticlesStack() {
         options={{
           headerTitleStyle: styles.bigText,
           header: () => (
-            <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
               <Text style={styles.bigText}> Settings</Text>
             </SafeAreaView>
           ),
@@ -488,7 +486,7 @@ function ArticlesStack() {
         options={{
           headerTitleStyle: styles.bigText,
           header: () => (
-            <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
               <Text style={styles.bigText}> Home</Text>
             </SafeAreaView>
           ),
@@ -499,7 +497,7 @@ function ArticlesStack() {
         component={ArticleDetails}
         options={({ route }) => ({
           header: () => (
-            <SafeAreaView style={{ backgroundColor: '#c4edc4' }}>
+            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
               <Text style={styles.articleTitle}>{route.params.article.title}</Text>
             </SafeAreaView>
           ),
@@ -516,7 +514,7 @@ const HomeTabNavigator = () => (
       options={{
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Entypo name="home" size={24} color={focused ? '#4f6f52' : '#111'} />
+            <Entypo name="home" size={24} color={focused ? 'white' : '#6E9A62'} />
           </View>
         ),
       }}
@@ -527,7 +525,7 @@ const HomeTabNavigator = () => (
       options={{
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Entypo name="globe" size={24} color={focused ? '#4f6f52' : '#111'} />
+            <Entypo name="globe" size={24} color={focused ? 'white' : '#6E9A62'} />
           </View>
         ),
       }}
@@ -538,7 +536,7 @@ const HomeTabNavigator = () => (
       options={{
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Entypo name="book" size={24} color={focused ? '#4f6f52' : '#111'} />
+            <Entypo name="book" size={24} color={focused ? 'white' : '#6E9A62'} />
           </View>
         ),
       }}
@@ -549,7 +547,7 @@ const HomeTabNavigator = () => (
       options={{
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Ionicons name="settings" size={24} color={focused ? '#4f6f52' : '#111'} />
+            <Ionicons name="settings" size={24} color={focused ? 'white' : '#6E9A62'} />
           </View>
         ),
       }}
@@ -559,12 +557,12 @@ const HomeTabNavigator = () => (
 
 
 const styles = StyleSheet.create({
-  previewImage: {
-    width: 250,
-    height: 250,
-    borderRadius: 10,
+  post2Button: {
+    backgroundColor: '#c4edc4', // Set button color
+    padding: 10,
+    width: '100%',
+    alignItems: 'center',
     marginTop: 16,
-    marginBottom: 16,
   },
   createPostContainer: {
     flex: 1,
@@ -573,20 +571,129 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#ecf9ec', 
   },
+
+
+  squarePhotoContainer: {
+    backgroundColor: '#ccc',
+    width: 250,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+
   bigText: {
     fontSize: 35,
     fontWeight: 'bold',
-    backgroundColor: '#c4edc4',
+    backgroundColor: '#3C683E',
     width: 600,
+    color: 'white',
+    paddingBottom:10,
   },
   bigDiv: {
-    backgroundColor: '#ecf9ec',
+    backgroundColor: '#E0F6E1',
     paddingBottom: 80,
+    paddingHorizontal:5,
   },
   articleImage: {
     width: '100%',
     height: 200,
     borderRadius: 10,
+  },
+  contentsStyle: {
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 15,
+    paddingBottom: 15,
+    fontSize: 17,
+    fontWeight: 'normal',
+    textAlign: 'justify',
+  },
+  articleTitle: {
+    backgroundColor: '#3C683E',
+    fontWeight: 'bold',
+    fontSize: 30,
+    paddingTop: 10,
+    paddingLeft: 15,
+    color: 'white',
+    paddingBottom: 10,
+  },
+  imageStyle: {
+    marginLeft: 25,
+    marginRight: 25,
+    width: '90%',
+    marginTop: 20,
+    borderRadius: 10,
+  },
+  title: {
+    fontSize: 37,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    width: '100%',
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingLeft: 8,
+    borderRadius:7,
+    backgroundColor:'#E5F1E1',
+  },
+  registerText: {
+    marginTop: 16,
+    
+  },
+  link: {
+    backgroundColor: '#355E38',
+    padding: 10,
+    width: '50%', // Adjust the width as needed
+    alignItems: 'center',
+
+  },
+  linkText: {
+    color:'white',
+    fontSize:15,
+    fontWeight:'bold'
+  },
+  small:{
+    color: '#355E38',
+  },
+  signin: {
+    flex: 1,
+    backgroundColor:  '#C3E3B9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  previewImage: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+
+  buttonText: {
+    color:'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  circularButton: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#4f6f52',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  circularProfilePicture: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center', // Half of the width and height to create a circle
   },
   photoContainer: {
     backgroundColor: '#ccc', // Gray square background color
@@ -598,88 +705,18 @@ const styles = StyleSheet.create({
     borderRadius: 10, // Set the borderRadius to make it a rounded square
     overflow: 'hidden', // Clip the content to the rounded shape
   },
-  squarePhotoContainer: {
-    backgroundColor: '#ccc',
-    width: 250,
-    height: 250,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  post2Button: {
-    backgroundColor: '#c4edc4', // Set button color
-    padding: 10,
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  contentsStyle: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 15,
-    paddingBottom: 15,
-    fontSize: 17,
-    fontWeight: 'normal',
-  },
-  articleTitle: {
-    backgroundColor: '#c4edc4',
+  buttonText: {
+    color: '#fff',
     fontWeight: 'bold',
-    fontSize: 30,
-    paddingTop: 10,
-    paddingLeft: 5,
+    fontSize:17
   },
-  imageStyle: {
-    marginLeft: 25,
-    marginRight: 25,
-    width: '90%',
-    marginTop: 20,
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    width: '100%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingLeft: 8,
-  },
-  registerText: {
-    marginTop: 16,
-  },
-  link: {
-    backgroundColor: '#c4edc4',
+  button: {
+    backgroundColor: '#355E38',
     padding: 10,
     width: '50%', // Adjust the width as needed
     alignItems: 'center',
+    borderRadius: 15,
+    margin:0
+},
 
-  },
-  signin: {
-    flex: 1,
-    backgroundColor: '#ecf9ec',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  previewImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: 16,
-    marginBottom: 16,
-  },
-
-  circularButton: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#4f6f52',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
