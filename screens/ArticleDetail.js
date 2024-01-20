@@ -7,7 +7,8 @@ const ArticleDetail = ({ route }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.bigDiv}>
-        <Image style={styles.articleImage} source={article.image} />
+        <Image style={styles.articleImage} source={require(article.image)} />
+
         <Text style={styles.bigText}>{article.title}</Text>
         
       </View>
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
   bigDiv: {
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: '#ecf9ec',
+    backgroundColor: '#E0F6E1',
   },
   title: {
     fontSize: 30,
