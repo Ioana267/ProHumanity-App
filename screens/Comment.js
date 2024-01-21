@@ -1,13 +1,13 @@
-//Comment.js (comments pt postari feed)
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Title } from 'react-native';
-import { Avatar, List} from 'react-native-paper';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
+import { IconButton, List } from 'react-native-paper';
 
-const Comment = ({ postId, onCommentSubmit }) => {
+const Comment = ({ postId, onCommentSubmit, username, post }) => {
   const [commentText, setCommentText] = useState('');
 
   const handleCommentSubmit = () => {
     if (commentText.trim() !== '') {
+      // Pass the commentText to onCommentSubmit callback
       onCommentSubmit(postId, commentText);
       setCommentText('');
     }
@@ -16,12 +16,22 @@ const Comment = ({ postId, onCommentSubmit }) => {
   return (
     <View style={styles.commentContainer}>
       <TextInput
-        style={styles.commentInput}
-        placeholder='Write a comment'
+        label="Add a comment"
         value={commentText}
-        onChangeText={(text) => setCommentText(text)}
+        onChangeText={setCommentText}
+        style={styles.commentInput}
       />
-      <Button title="Post Comment" onPress={handleCommentSubmit} color={'#c4edc4'}/>
+      <IconButton
+        icon="send"
+        color="black"
+        size={20}
+        onPress={handleCommentSubmit}
+      />
+      
+      
+      {post.comments.map((comment) => (
+       <List.Item key={comment.id} title={`${comment.username}: ${comment.text}`} />
+      ))}
     </View>
   );
 };
@@ -34,7 +44,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 5,
     padding: 5,
+    marginRight:15,
   },
+  username: {
+    fontWeight: 'bold',
+  },
+  commentText:{
+    color:'black',
+  }
 });
 
 export default Comment;
