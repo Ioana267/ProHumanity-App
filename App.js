@@ -1,3 +1,4 @@
+//App.js cu streaks si tot
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
@@ -191,6 +192,7 @@ const UsernameSetup = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const auth = getAuth();
+  const userDocRef = doc(getFirestore(), 'Users', auth.currentUser.uid);
 
   const handleUsernameChange = (text) => {
     setUsername(text);
@@ -204,13 +206,16 @@ const UsernameSetup = ({ navigation }) => {
         aspect: [1, 1],
         quality: 1,
       });
-
+  
       if (!result.cancelled) {
-        const storage = ref(getStorage(), 'profilePictures/${auth.currentUser.uid}/${Date.now()}.jpg');
+        const storage = ref(
+          getStorage(),
+          `profilePictures/${auth.currentUser.uid}/${Date.now()}.jpg`
+        );
         const response = await fetch(result.uri);
         const blob = await response.blob();
         await uploadBytes(storage, blob);
-
+  
         const profilePictureURL = await getDownloadURL(storage);
         setProfilePicture(profilePictureURL);
       }
@@ -223,7 +228,7 @@ const UsernameSetup = ({ navigation }) => {
     try {
       const user = auth.currentUser;
 
-      const storage = ref(getStorage(), 'profilePictures/${user.uid}/${Date.now()}.jpg');
+      const storage = ref(getStorage(), `profilePictures/${user.uid}/${Date.now()}.jpg`);
       const response = await fetch(profilePicture);
       const blob = await response.blob();
       await uploadBytes(storage, blob);
@@ -238,10 +243,9 @@ const UsernameSetup = ({ navigation }) => {
         photoURL: profilePictureURL,
       });
 
-      const userDocRef = doc(getFirestore(), 'Users', user.uid);
       await setDoc(userDocRef, {
         username,
-        profilePicture: profilePictureURL,
+        profilePicture: profilePictureURL, // Set the profile picture URL
         streak: streak, // Include the streak field in the Users collection
       });
 
@@ -505,14 +509,12 @@ const CreatePostScreen = ({ navigation }) => {
       console.error('Error saving photo:', error.message);
     }
   };
-
-  // Function to check if the last post was made on a different day
-  const isNewDay = (lastPostTimestamp) => {
+   // Function to check if the last post was made on a different day
+   const isNewDay = (lastPostTimestamp) => {
     const lastPostDate = new Date(lastPostTimestamp).toLocaleDateString();
     const currentDate = new Date().toLocaleDateString();
     return lastPostDate !== currentDate;
   };
-
 
 
   return (
