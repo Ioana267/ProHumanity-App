@@ -4,7 +4,6 @@ import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image } from 'react-n
 import { Avatar, Title, IconButton, List } from 'react-native-paper';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { getFirestore, collection, onSnapshot, query, doc, getDoc, orderBy } from 'firebase/firestore';
-import * as Font from 'expo-font';
 import { getAuth } from 'firebase/auth';
 import Comment from './Comment';
 import { useNavigation } from '@react-navigation/native';
@@ -139,6 +138,7 @@ const Home = () => {
             {
               id: post.comments.length + 1,
               text: commentText,
+              username: currentUser.displayName, // Include the username in the comment object
             },
           ],
         }, { merge: true });
@@ -153,6 +153,7 @@ const Home = () => {
               {
                 id: post.comments.length + 1,
                 text: commentText,
+                username: currentUser.displayName,
               },
             ],
           };
@@ -163,6 +164,7 @@ const Home = () => {
       console.error('Error updating comments:', error);
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -185,6 +187,7 @@ const Home = () => {
           posts.map((post) => (
             <View key={post.id} style={[styles.postContainer]}>
               <Avatar.Image size={40} source={{ uri: post.user?.profilePicture || '' }} />
+              
               <View style={styles.postContent}>
                 <Title>{post.user?.username || 'Unknown User'}</Title>
                 <Text>{post.description}</Text>
@@ -192,8 +195,7 @@ const Home = () => {
                 {post.photo && post.photo.trim() !== '' && (
                   <Image source={{ uri: post.photo }} style={styles.postPhoto} />
                 )}
-                <View style={styles.actionsContainer}>
-                  <View style={styles.reactionContainer}>
+                <View style={styles.reactionContainer}>
                     <IconButton
                       icon={() => (
                         <FontAwesomeIcon
@@ -206,14 +208,17 @@ const Home = () => {
                     />
                     <Text style={styles.reactionCount}>{post.totalLikes}</Text>
                   </View>
-                  {/* (existing code for other reactions) */}
-                  <Comment postId={post.id} onCommentSubmit={handleCommentSubmit} />
+                <View style={styles.actionsContainer}>
+                  
+                  
+                  <Comment
+                    postId={post.id}
+                    onCommentSubmit={handleCommentSubmit}
+                    username={post.user.username}
+                    post={post}
+                  />
                 </View>
-                <View style={styles.commentsContainer}>
-                  {post.comments.map((comment) => (
-                    <List.Item key={comment.id} title={comment.text} />
-                  ))}
-                </View>
+                
               </View>
             </View>
           ))
@@ -289,7 +294,7 @@ const styles = StyleSheet.create({
   },
   postButton: {
     right: 20,
-    top: 20,
+    //top: 20,
     backgroundColor: 'white',
     width: 30,
     height: 30,
