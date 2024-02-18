@@ -1,6 +1,6 @@
 //Home.js 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image,  Platform  } from 'react-native';
 import { Avatar, Title, IconButton, List } from 'react-native-paper';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { getFirestore, collection, onSnapshot, query, doc, getDoc, orderBy } from 'firebase/firestore';
@@ -183,48 +183,42 @@ const Home = () => {
         </View>
       </View>
       <ScrollView style={{ backgroundColor: '#E0F6E1' }}>
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <View key={post.id} style={[styles.postContainer]}>
-              <Avatar.Image size={40} source={{ uri: post.user?.profilePicture || '' }} />
-              
-              <View style={styles.postContent}>
-                <Title>{post.user?.username || 'Unknown User'}</Title>
-                <Text>{post.description}</Text>
+        {posts.map((post) => (
+          <View key={post.id} style={[styles.postContainer]}>
+            <Avatar.Image size={40} source={{ uri: post.user?.profilePicture || '' }} />
+            
+            <View style={styles.postContent}>
+              <Title>{post.user?.username || 'Unknown User'}</Title>
+              <Text>{post.description}</Text>
 
-                {post.photo && post.photo.trim() !== '' && (
-                  <Image source={{ uri: post.photo }} style={styles.postPhoto} />
-                )}
-                <View style={styles.reactionContainer}>
-                    <IconButton
-                      icon={() => (
-                        <FontAwesomeIcon
-                          name="heart"
-                          size={20}
-                          color={post.currentUserLike === 1 ? 'red' : 'grey'}
-                        />
-                      )}
-                      onPress={() => handleReact(post.id, 'like')}
-                    />
-                    <Text style={styles.reactionCount}>{post.totalLikes}</Text>
-                  </View>
-                <View style={styles.actionsContainer}>
-                  
-                  
-                  <Comment
-                    postId={post.id}
-                    onCommentSubmit={handleCommentSubmit}
-                    username={post.user.username}
-                    post={post}
+              {post.photo && post.photo.trim() !== '' && (
+                <Image source={{ uri: post.photo }} style={styles.postPhoto} />
+              )}
+              <View style={styles.reactionContainer}>
+                  <IconButton
+                    icon={() => (
+                      <FontAwesomeIcon
+                        name="heart"
+                        size={20}
+                        color={post.currentUserLike === 1 ? 'red' : 'grey'}
+                      />
+                    )}
+                    onPress={() => handleReact(post.id, 'like')}
                   />
+                  <Text style={styles.reactionCount}>{post.totalLikes}</Text>
                 </View>
-                
+              <View style={styles.actionsContainer}>
+                <Comment
+                  postId={post.id}
+                  onCommentSubmit={handleCommentSubmit}
+                  username={post.user.username}
+                  post={post}
+                />
               </View>
+              
             </View>
-          ))
-        ) : (
-          <View style={styles.bottomRectangle}></View>
-        )}
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -233,7 +227,17 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#3C683E',
-    paddingBottom: 130,
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 130,
+      },
+      android: {
+        // Android specific styles
+        paddingBottom: 150,
+      }
+    })
+    
   },
   header: {
     flexDirection: 'row',
@@ -242,6 +246,17 @@ const styles = StyleSheet.create({
     padding: 0,
     paddingBottom: 5,
     backgroundColor: '#3C683E',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        
+      },
+      android: {
+        // Android specific styles
+        height: 80, 
+        alignItems: 'flex-end',
+      }
+    })
   },
   bigText: {
     fontSize: 35,
@@ -251,9 +266,19 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingLeft: 15,
     paddingRight: 3,
-    marginBottom: 3,
+    
     alignItems: 'center',
     color: 'white',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        marginBottom: 3,
+      },
+      android: {
+        // Android specific styles
+        marginBottom: 5,
+      }
+    })
   },
   postContainer: {
     flexDirection: 'row',
@@ -294,14 +319,19 @@ const styles = StyleSheet.create({
   },
   postButton: {
     right: 20,
-    //top: 20,
     backgroundColor: 'white',
     width: 30,
     height: 30,
-  },
-  bottomRectangle: {
-    height: 0,
-    backgroundColor: '#ecf9ec',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+      },
+      android: {
+        // Android specific styles
+        marginTop: 100,
+        marginBottom: -3,
+      }
+    })
   },
 });
 
