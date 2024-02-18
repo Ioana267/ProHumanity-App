@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
-import * as Font from 'expo-font';
 
 const articlesData = [
     {
@@ -46,11 +45,16 @@ const ArticlePreview = ({ article, navigation }) => {
       </TouchableOpacity>
     );
   };
-
+  const CustomHeader1 = () => {
+    return (
+      <SafeAreaView style={styles.header}>
+        <Text style={styles.bigText}>Privacy Policy</Text>
+      </SafeAreaView>
+    );
+  };
 const Articles = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#A1BA9A' }}>
-      
       <FlatList
         data={articlesData}
         keyExtractor={(item) => item.id.toString()}
