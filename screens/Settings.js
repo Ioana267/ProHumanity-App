@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Modal, Button } from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Modal, Button, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
@@ -7,7 +7,6 @@ import { onSnapshot } from 'firebase/firestore';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as ImagePicker from 'expo-image-picker';
 const Stack = createStackNavigator();
-import * as Font from 'expo-font';
 
 const EditProfileScreen = () => {
   const auth = getAuth();
@@ -71,8 +70,8 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#3C683E' }}>
-      <Text style={styles.bigText}>Edit Profile</Text>
+    <SafeAreaView style={styles.container}>
+    <CustomHeader3 />
       <SafeAreaView style={{ flex: 1, backgroundColor: '#E0F6E1' }}>
         <View>
           <TouchableOpacity
@@ -113,16 +112,41 @@ const EditProfileScreen = () => {
 
 
 
-
+const CustomHeader1 = () => {
+  return (
+    <SafeAreaView style={styles.header}>
+      <Text style={styles.bigText}>Privacy Policy</Text>
+    </SafeAreaView>
+  );
+};
+const CustomHeader2 = () => {
+  return (
+    <SafeAreaView style={styles.header}>
+      <Text style={styles.bigText}>Terms of Service</Text>
+    </SafeAreaView>
+  );
+};
+const CustomHeader3 = () => {
+  return (
+    <SafeAreaView style={styles.header}>
+      <Text style={styles.bigText}>Edit Profile</Text>
+    </SafeAreaView>
+  );
+};
+const CustomHeader4 = () => {
+  return (
+    <SafeAreaView style={styles.header}>
+      <Text style={styles.bigText}>Settings</Text>
+    </SafeAreaView>
+  );
+};
 
 const PrivacyPolicyScreen = () => (
-  <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
-    {/* Pagina EditProfile */}
+  <SafeAreaView style={styles.container}>
+      <CustomHeader1 />
+    <ScrollView style={{ backgroundColor: '#E0F6E1', paddingLeft: 20, paddingRight: 20, }}>
 
-    <Text style={styles.bigText}>Privacy Policy </Text>
-    <ScrollView style={{ backgroundColor: '#E0F6E1', paddingLeft: 20, paddingRight: 20 }}>
-
-      <Text style={{ fontSize: 17, paddingBottom: 100 }}>
+      <Text style={{ fontSize: 17, paddingBottom: 80 }}>
         <Text style={{ fontWeight: 'bold' }}>Last updated:</Text> 1/6/2024 {'\n'}
         {'\n'}
         Welcome to ProHumanity, an app created to [provide a brief description of the app's purpose and functionality]. This Privacy Policy outlines how we collect, use, disclose, and safeguard your personal information. By using the ProHumanity app, you agree to the terms outlined in this policy. {'\n'}
@@ -172,8 +196,8 @@ const PrivacyPolicyScreen = () => (
 );
 
 const TermsOfServiceScreen = () => (
-  <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
-    <Text style={styles.bigText}>Terms of Service </Text>
+  <SafeAreaView style={styles.container}>
+      <CustomHeader2 />
     <ScrollView style={{ backgroundColor: '#E0F6E1', paddingLeft: 20, paddingRight: 20 }}>
 
       <Text style={{ fontSize: 17, paddingBottom: 100 }}>
@@ -335,9 +359,9 @@ const Settings = () => {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="SettingsScreen" component={() => (
           <View style={styles.container}>
-            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
-              <Text style={styles.bigText}>Settings</Text>
-            </SafeAreaView>
+            
+            <CustomHeader4 />
+            
 
             <View style={styles.section}>
               <View style={styles.row}>
@@ -397,6 +421,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 10,
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        marginLeft: 140,
+      },
+      android: {
+        // Android specific styles
+        marginLeft: 120,
+      }
+    })
   },
   dividers: {
     fontSize: 19,
@@ -418,7 +452,17 @@ const styles = StyleSheet.create({
     width: 600,
     paddingLeft: 10,
     color: 'white',
-    paddingBottom: 10,
+    
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 10,
+      },
+      android: {
+        // Android specific styles
+        paddingBottom: 5,
+      }
+    })
   },
   typa: {
     fontSize: 18,
@@ -448,6 +492,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#026440',
     marginLeft: 135,
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        marginLeft: 160,
+      },
+      android: {
+        // Android specific styles
+        marginLeft: 145,
+      }
+    })
   },
   row: {
     flexDirection: 'row',
@@ -514,9 +568,18 @@ const styles = StyleSheet.create({
   profilePicture: {
     width: 120,
     height: 120,
-    marginLeft: 10,
     borderRadius: 100,
-    marginLeft: 120,
+    
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        marginLeft: 120,
+      },
+      android: {
+        // Android specific styles
+        marginLeft: 110,
+      }
+    })
   },
   saveButton: {
     width: '40%',
@@ -541,6 +604,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 0,
+    
+    backgroundColor: '#3C683E',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 5,
+      },
+      android: {
+        // Android specific styles
+        height: 80, 
+        alignItems: 'flex-end',
+        paddingBottom: 0,
+      }
+    })
   },
 });
 
