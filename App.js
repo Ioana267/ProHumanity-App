@@ -28,7 +28,7 @@ import LandingPage from './screens/LandingPage';
 import Post from './screens/Post';
 import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
 import * as ImagePicker from 'expo-image-picker';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableOpacity, Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -131,7 +131,7 @@ const SignUp = ({ navigation }) => {
       await setDoc(userDocRef, {
         email: result.user.email,
         // Add other user data you want to store in the document
-        streak: 0, 
+        streak: 0,
       });
 
       console.log('User signed up successfully!');
@@ -206,7 +206,7 @@ const UsernameSetup = ({ navigation }) => {
         aspect: [1, 1],
         quality: 1,
       });
-  
+
       if (!result.cancelled) {
         const storage = ref(
           getStorage(),
@@ -215,7 +215,7 @@ const UsernameSetup = ({ navigation }) => {
         const response = await fetch(result.uri);
         const blob = await response.blob();
         await uploadBytes(storage, blob);
-  
+
         const profilePictureURL = await getDownloadURL(storage);
         setProfilePicture(profilePictureURL);
       }
@@ -509,8 +509,8 @@ const CreatePostScreen = ({ navigation }) => {
       console.error('Error saving photo:', error.message);
     }
   };
-   // Function to check if the last post was made on a different day
-   const isNewDay = (lastPostTimestamp) => {
+  // Function to check if the last post was made on a different day
+  const isNewDay = (lastPostTimestamp) => {
     const lastPostDate = new Date(lastPostTimestamp).toLocaleDateString();
     const currentDate = new Date().toLocaleDateString();
     return lastPostDate !== currentDate;
@@ -563,6 +563,11 @@ const screenOptions = {
     backgroundColor: '#3C683E',
   },
 };
+const CustomHeader1 = () => (
+  <SafeAreaView style={[styles.header, { backgroundColor: '#3C683E' }]}>
+    <Text style={styles.bigText}>Articles</Text>
+  </SafeAreaView>
+);
 
 function ArticleDetails({ route }) {
   const { article } = route.params;
@@ -587,21 +592,20 @@ function ArticlesStack() {
           headerTitleStyle: styles.bigText,
           header: () => (
             <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
-              <Text style={styles.bigText}> Articles</Text>
+              <CustomHeader1/>
             </SafeAreaView>
           ),
         }}
       />
-      <Stack.Screen
+       <Stack.Screen
         name="Settings"
         component={Settings}
         options={{
           headerTitleStyle: styles.bigText,
-          header: () => (
-            <SafeAreaView style={{ backgroundColor: '#3C683E' }}>
-              <Text style={styles.bigText}> Settings</Text>
-            </SafeAreaView>
-          ),
+          headerStyle: {
+            height: Platform.OS === 'android' ? 80 : 60, // Adjusting header height based on platform
+            backgroundColor: '#3C683E',
+          },
         }}
       />
       <Stack.Screen
@@ -681,6 +685,26 @@ const HomeTabNavigator = () => (
 
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 0,
+    paddingLeft: 10,
+    backgroundColor: '#3C683E',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 5,
+        paddingLeft: 20,
+      },
+      android: {
+        // Android specific styles
+        marginTop: 20,
+        alignItems: 'flex-end',
+      }
+    })
+  },
   post2Button: {
     backgroundColor: '#c4edc4', // Set button color
     padding: 10,
@@ -695,7 +719,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#ecf9ec',
   },
-
 
   squarePhotoContainer: {
     backgroundColor: '#ccc',
@@ -714,6 +737,17 @@ const styles = StyleSheet.create({
     width: 600,
     color: 'white',
     paddingBottom: 10,
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 10,
+      },
+      android: {
+        // Android specific styles
+        paddingBottom: 5,
+        paddingTop: 5,
+      }
+    })
   },
   bigDiv: {
     backgroundColor: '#E0F6E1',
@@ -841,6 +875,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     margin: 0
-  },
+  }
 
 });
