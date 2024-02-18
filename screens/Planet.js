@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, PanResponder, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, PanResponder, Modal, Platform } from 'react-native';
 import { Canvas } from '@react-three/fiber';
 import { Mesh, SphereGeometry, MeshStandardMaterial, DirectionalLight, LineLoop, Line, BufferGeometry, BufferAttribute } from 'three';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import * as Font from 'expo-font';
 import { getAuth } from 'firebase/auth';
 
 const Planet = () => {
@@ -27,6 +26,13 @@ const Planet = () => {
     })
   ).current;
 
+  const CustomHeader1 = () => {
+    return (
+      <SafeAreaView style={styles.header}>
+        <Text style={styles.bigText}>Planet</Text>
+      </SafeAreaView>
+    );
+  };
   const toggleTasksModal = () => {
     setTasksModalVisible(!isTasksModalVisible);
   };
@@ -37,8 +43,7 @@ const Planet = () => {
   };
  return (
     <View style={styles.container}>
-      <SafeAreaView style={{ backgroundColor: '#3C683E' }}/>
-      <Text style={styles.bigText}>Planet</Text>
+      <CustomHeader1 />
       <TouchableOpacity style={styles.button} onPress={toggleTasksModal}>
         <Icon name="bars" size={30} color="white" />
       </TouchableOpacity>
@@ -132,13 +137,33 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 10,
     color: 'white',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        paddingBottom: 10,
+      },
+      android: {
+        // Android specific styles
+        paddingBottom: 0,
+      }
+    })
  },
  button: {
     position: 'absolute',
-    top:55,
+   
     right: 20,
     zIndex: 10,
     color:'white',
+    ...Platform.select({
+      ios: {
+        // iOS specific styles
+        top:55,
+      },
+      android: {
+        // Android specific styles
+        top:45,
+      }
+    })
  },
  modalContainer: {
   flex: 1,
@@ -201,6 +226,26 @@ addButton: {
   borderRadius:15,
   width:'100%',
   marginBottom: 10,
+},
+header: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: 0,
+
+  backgroundColor: '#3C683E',
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+      paddingBottom: 5,
+    },
+    android: {
+      // Android specific styles
+      height: 80, 
+      alignItems: 'flex-end',
+      paddingBottom: 5,
+    }
+  })
 },
 });
 
