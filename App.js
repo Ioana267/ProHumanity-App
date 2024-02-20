@@ -29,6 +29,7 @@ import Post from './screens/Post';
 import { Home, Settings, Planet, Articles, EditProfile, AdvancedSettings, PrivacyPolicy, TermsOfService, Logout } from './screens';
 import * as ImagePicker from 'expo-image-picker';
 import { View, ScrollView, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,7 +61,6 @@ const firestore = getFirestore();
 export default function App() {
   // State to track whether Firebase is initialized
   const [firebaseInitialized, setFirebaseInitialized] = useState(false);
-
   useEffect(() => {
     // Check if Firebase is already initialized
     if (!firebaseInitialized) {
@@ -407,9 +407,10 @@ const CreatePostScreen = ({ navigation }) => {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [realTimeStreak, setRealTimeStreak] = useState(0);
   const [userProfilePicture, setUserProfilePicture] = useState('');
-
   const auth = getAuth();
   const user = auth.currentUser;
+  const [userXP, setUserXP] = useState(0); // New state for user XP
+  const [userLevel, setUserLevel] =useState(0);
 
   useEffect(() => {
     const unsubscribe = listenToStreakUpdates(user.uid);
@@ -418,13 +419,15 @@ const CreatePostScreen = ({ navigation }) => {
 
   const listenToStreakUpdates = (userId) => {
     const userDocRef = doc(getFirestore(), 'Users', userId);
-
+//userData
     // Set up a real-time listener
     const unsubscribe = onSnapshot(userDocRef, (doc) => {
       if (doc.exists()) {
         const userData = doc.data();
         setRealTimeStreak(userData.streak || 0);
         setUserProfilePicture(userData.profilePicture || ''); // Fetch user profile picture
+        setUserXP(userData.xp || 0); // Update user XP
+        setUserLevel (userData.level||0); //update user level
       }
     });
 
@@ -484,31 +487,59 @@ const CreatePostScreen = ({ navigation }) => {
         task: task,
         timestamp: serverTimestamp(),
         streak: newStreak, // Save the calculated streak
+        xp: userXP+calculateXP(task), // Save the calculated XP for the task
+        level: calculatelevel(userXP+calculateXP(task)),
       });
-
       // Update the streak in the Users collection
       const userDocRef = doc(firestore, 'Users', user.uid);
       await updateDoc(userDocRef, {
         streak: newStreak,
         lastPostTimestamp: newLastPostTimestamp,
+        xp: userXP+calculateXP(task), // Update user XP with calculated XP
+        level: calculatelevel(userXP+calculateXP(task)),
       });
-
       setCurrentStreak(newStreak);
       setRealTimeStreak(newStreak);
-
       console.log('Photo saved successfully:', photoURL);
-
+      
       // Clear the fields after saving
       setPhoto('');
       setDescription('');
       setTask('');
-
       // Navigate back to the Home screen
       navigation.goBack();
     } catch (error) {
       console.error('Error saving photo:', error.message);
     }
   };
+  // Function to calculate XP based on task
+  const calculateXP = (task) => {
+    if (task === '1') {
+      return 10;
+    } 
+    else if (task === '2') {
+      return 30;
+    }
+    return 0;
+  };
+  //function to calculate the level based on xp
+  const calculatelevel=(userXP)=>{
+    if (userXP>=700) return 15;
+    else if (userXP>= 600)  return 14;
+         else if (userXP>=550) return 13;
+            else if (userXP>=500) return 12;
+                else if (userXP>=450) return 11; 
+                    else if (userXP>=400) return 10;
+                        else if (userXP>=350) return 9;
+                             else if (userXP>=300) return 8;
+                                  else if (userXP>=250) return 7;
+                                       else if (userXP>=200) return 6;
+                                           else if (userXP>=150) return 5;
+                                                else if (userXP>=100 ) return 4;
+                                                    else if (userXP>=60) return 3;
+                                                         else if (userXP>=30) return 2;
+                                                              else if (userXP>='0') return 1;
+  }
   // Function to check if the last post was made on a different day
   const isNewDay = (lastPostTimestamp) => {
     const lastPostDate = new Date(lastPostTimestamp).toLocaleDateString();
