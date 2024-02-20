@@ -33,11 +33,11 @@ git merge origin/main
 # TASKURI
 
 A ramas sa:
-1. log in/sign in
-2. pagina planeta
-3. conectat la baza de date pentru a:
-    - face butonul ptr postari
-    - termina pagina setari
-4. conectare cu XP
+1. log in/sign in |DONE|
+2. pagina planeta |DONE|
+3. conectat la baza de date pentru a: |DONE|
+    - face butonul ptr postari |DONE|
+    - termina pagina setari |DONE|
+4. conectare cu XP |DONE|
 
 
