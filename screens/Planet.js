@@ -1,18 +1,25 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, PanResponder, Modal, Platform } from 'react-native';
 import { Canvas } from '@react-three/fiber';
-import { Mesh, SphereGeometry, MeshStandardMaterial, DirectionalLight, LineLoop, Line, BufferGeometry, BufferAttribute } from 'three';
+import { Mesh, SphereGeometry, MeshStandardMaterial, DirectionalLight, LineLoop, Line, LineDashedMaterial, BufferGeometry, BufferAttribute  } from 'three';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
+
+
 
 const Planet = () => {
+  const [neededXP]=useState(0);
   const planetGroup = useRef();
   const lightRef = useRef();
   const navigation = useNavigation();
   const [isTasksModalVisible, setTasksModalVisible] = useState(false);
   const auth = getAuth();
-  const currentUser = auth.currentUser;
+  const user = auth.currentUser;
+  const [userXP, setUserXP] = useState(0); // Add this line to initialize xp state
+  const [userLevel, setUserLevel]=useState(0); //initialize level state with 0
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -25,6 +32,47 @@ const Planet = () => {
       },
     })
   ).current;
+//am transferat din firebase aici pentru xp uri
+  useEffect(() => {
+    // Fetch the xp information from Firestore
+    const fetchUserXP = async () => {
+      try {
+        const userDocRef = doc(getFirestore(), 'Users', user.uid);
+        const unsubscribe = onSnapshot(userDocRef, (doc) => {
+          const userData = doc.data();
+          if (userData && userData.xp) {
+            setUserXP(userData.xp);
+          }
+        });
+
+        // Clean up the listener when the component is unmounted
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('Error fetching xp.', error.message);
+      }
+    };
+    // Fetch the level information from Firestore
+    const fetchLevel = async () => {
+      try {
+        const userDocRef = doc(getFirestore(), 'Users', user.uid);
+        const unsubscribe = onSnapshot(userDocRef, (doc) => {
+          const userData = doc.data();
+          if (userData && userData.level) {
+            setUserLevel(userData.level);
+          }
+        });
+
+        // Clean up the listener when the component is unmounted
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('Error fetching level.', error.message);
+      }
+    };
+    // Call the fetchUserXP function
+    fetchUserXP();
+    //call the fetchLevel Function
+    fetchLevel();
+  },[]);
 
   const CustomHeader1 = () => {
     return (
@@ -38,53 +86,130 @@ const Planet = () => {
   };
   const handlePostPress = () => {
     console.log('Post button pressed');
-    navigation.navigate('Post', { currentUserId: currentUser.uid });
+    navigation.navigate('Post', { currentUserId: user.uid });
     setTasksModalVisible(!isTasksModalVisible);
   };
+  //imaginea planetei in functie de nivel
+  const planetImageLevel =(userLevel)=>{
+    if (userLevel===1) return require('./nivel1.png');
+    else if (userLevel===2) return require('./nivel2.png');
+    else if (userLevel===3) return require('./nivel3.png');
+    else if (userLevel===4) return require('./nivel4.png');
+    else if (userLevel===5) return require('./nivel5.png');
+    else if (userLevel===6) return require('./nivel6.png');
+    else if (userLevel===7) return require('./nivel7.png');
+    else if (userLevel===8) return require('./nivel8.png');
+    else if (userLevel===9) return require('./nivel9.png');
+    else if (userLevel===10) return require('./nivel10.png');
+    else if (userLevel===11) return require('./nivel11.png');
+    else if (userLevel===12) return require('./nivel12.png');
+    else if (userLevel===13) return require('./nivel13.png');
+    else if (userLevel===14) return require('./nivel14.png');
+    else if (userLevel===15) return require('./nivel15.png');
+  }
+  //function to calculate how many xp you need to reach next level
+  const nedeedxpfunction=(userLevel, userXP) =>{
+    if (userLevel==1) return (
+      <View>
+       <Text style={styles.neededXpText}>You need {30 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    ); else if (userLevel==2) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {60 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==3) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {100 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==4) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {150 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==5) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {200 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==6) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {250 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==7) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {300 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==8) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {350 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==9) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {400 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==10) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {450 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==11) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {500 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==12) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {550 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==13) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {600 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==14) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {700 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==15) return (
+      <View>
+        <Text style={styles.xplevelText}>You saved the planet! Yey! </Text>
+      </View>
+    );
+  }
  return (
     <View style={styles.container}>
       <CustomHeader1 />
       <TouchableOpacity style={styles.button} onPress={toggleTasksModal}>
         <Icon name="bars" size={30} color="white" />
       </TouchableOpacity>
-      <Canvas style={{ marginTop: -200 }} {...panResponder.panHandlers}>
-      <directionalLight ref={lightRef} position={[5, 5, 5]} />
-        <group ref={planetGroup}>
-          <mesh castShadow receiveShadow>
-            <sphereGeometry args={[1, 32, 32]} />
-            <meshStandardMaterial color={'green'} />
-          </mesh>
-          {Array.from({ length: 32 }, (_, i) => (
-
-            <lineLoop key={i} rotation={[0, 0, (Math.PI * 2 * i) / 32]} scale={[1.5, 1.5, 1.5]}>
-              <bufferGeometry attach="geometry">
-                <bufferAttribute
-                  attachObject={['position', '']}
-                  count={180}
-                  array={new Float32Array(180 * 3)}
-                  itemSize={3}
-                />
-              </bufferGeometry>
-              <lineBasicMaterial attach="material" color="black" />
-            </lineLoop>
-          ))}
-          {Array.from({ length: 180 }, (_, i) => i).map((i) => (
-
-
-            <line key={i} position={[0, Math.sin((Math.PI * i) / 180), Math.cos((Math.PI * i) / 180)]} scale={[1.5, 1, 1]}>
-              <bufferGeometry attach="geometry">
-                <bufferAttribute
-                  attachObject={['position', '']}
-                  count={360}
-                  array={new Float32Array(360 * 3)}
-                  itemSize={3}
-                />
-              </bufferGeometry>
-              <lineBasicMaterial attach="material" color="black" opacity={0.5} transparent />
-            </line>
-          ))}
-        </group>
-      </Canvas>
+      <View style={styles.xpBox}>
+            <View style={styles.greenBox}>
+                  <Text style={styles.xplevelText}>{userXP} xp</Text>
+            </View>
+       </View>
+       <View style={styles.levelBox}>
+            <View style={styles.greenBox}>
+                  <Text style={styles.xplevelText}>level {userLevel}</Text>
+            </View>
+       </View>
+      <View style={styles.planetContainer}>
+        <Image source={planetImageLevel(userLevel) } style={styles.planetImage} />
+        <View/>
+        
+      </View>
+      <View style={styles.neededXPBox}>
+            <View style={styles.neededXPgreenBox}>
+                  <Text>{nedeedxpfunction(userLevel, userXP)}</Text>
+            </View>
+       </View>
       <Modal
       animationType="fade"
       transparent={true}
@@ -97,7 +222,7 @@ const Planet = () => {
             <View style={styles.taskItemContainer}>
                 <Text style={styles.taskItem}>1. Pick up trash in a park.</Text>
                 <TouchableOpacity style={styles.addButton}>
-                  <Text style={styles.mark} onPress={handlePostPress} >Mark as done</Text>
+                  <Text style={styles.mark} onPrress={handlePostPress} >Mark as done</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.separator} />
@@ -157,11 +282,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         // iOS specific styles
-        top:55,
+        top:30,
       },
       android: {
         // Android specific styles
-        top:45,
+        top:30,
       }
     })
  },
@@ -246,6 +371,52 @@ header: {
       paddingBottom: 5,
     }
   })
+},
+xplevelText: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: 'white', 
+  
+},
+xpBox: {
+  marginVertical: 10, 
+  paddingLeft: 10,
+  paddingRight: 310,
+},
+levelBox: {
+  marginVertical: -43, 
+  paddingLeft: 313,
+  paddingRight: 10,
+},
+greenBox: {
+  backgroundColor: '#3C683E',
+  paddingHorizontal: 10, 
+  paddingVertical: 5, 
+  borderRadius: 5, 
+},
+neededXpText:{
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: 'white', 
+},
+neededXPBox: {
+  marginVertical: 40, 
+},
+neededXPgreenBox: {
+  backgroundColor: '#3C683E',
+  paddingLeft:55,
+  paddingRight:55,
+  paddingBottom:10,
+  paddingTop:10,
+},
+planetImage: {
+  width: 260,
+  height: 260,
+  borderRadius: 130,
+},
+planetContainer: {
+  alignItems: 'center',
+  marginTop: 130,
 },
 });
 
