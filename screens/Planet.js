@@ -19,7 +19,7 @@ const Planet = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const [userXP, setUserXP] = useState(0); // Add this line to initialize xp state
-  const [userLevel, setUserLevel]=useState(0); //initialize level state with 0
+  const [userLevel, setUserLevel]=useState(1); //initialize level state with 0
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
       },
       android: {
         // Android specific styles
-        top:30,
+        top:40,
       }
     })
  },
@@ -376,28 +376,66 @@ xplevelText: {
   fontSize: 20,
   fontWeight: 'bold',
   color: 'white', 
+
   
 },
 xpBox: {
-  marginVertical: 10, 
-  paddingLeft: 10,
-  paddingRight: 310,
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+      marginVertical: 10, 
+      paddingLeft: 10,
+      paddingRight: 310,
+    },
+    android: {
+      // Android specific styles
+      marginVertical: 10, 
+      paddingLeft: 10,
+      paddingRight: 270,
+    }
+  })
 },
 levelBox: {
-  marginVertical: -43, 
-  paddingLeft: 313,
-  paddingRight: 10,
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+      marginVertical: -43, 
+      paddingLeft: 313,
+      paddingRight: 10,
+    },
+    android: {
+      // Android specific styles
+      marginVertical: -43, 
+      marginBottom: 80,
+      paddingLeft: 250,
+      paddingRight: 10,
+    }
+  })
+ 
 },
 greenBox: {
   backgroundColor: '#3C683E',
   paddingHorizontal: 10, 
   paddingVertical: 5, 
   borderRadius: 5, 
+  paddingHorizontal: 10, 
+  paddingVertical: 5, 
+ 
 },
 neededXpText:{
   fontSize: 20,
   fontWeight: 'bold',
   color: 'white', 
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+    },
+    android: {
+      // Android specific styles
+      
+    }
+  })
+
 },
 neededXPBox: {
   marginVertical: 40, 
@@ -416,7 +454,15 @@ planetImage: {
 },
 planetContainer: {
   alignItems: 'center',
-  marginTop: 130,
+
+  ios: {
+    // iOS specific styles
+    marginTop: 130,
+  },
+  android: {
+    // Android specific styles
+    marginTop: 200,
+  }
 },
 });
 
