@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         // iOS specific styles
-        top:30,
+        top:50,
       },
       android: {
         // Android specific styles
@@ -442,10 +442,20 @@ neededXPBox: {
 },
 neededXPgreenBox: {
   backgroundColor: '#3C683E',
-  paddingLeft:55,
+  
   paddingRight:55,
   paddingBottom:10,
   paddingTop:10,
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+      paddingLeft: 55,
+    },
+    android: {
+      // Android specific styles
+      paddingLeft: 90,
+    }
+  })
 },
 planetImage: {
   width: 260,
@@ -454,16 +464,18 @@ planetImage: {
 },
 planetContainer: {
   alignItems: 'center',
-
-  ios: {
-    // iOS specific styles
-    marginTop: 130,
-  },
-  android: {
-    // Android specific styles
-    marginTop: 200,
-  }
+  ...Platform.select({
+    ios: {
+      // iOS specific styles
+      marginTop: 130,
+    },
+    android: {
+      // Android specific styles
+      marginTop: 40,
+    }
+  })
 },
+
 });
 
 export default Planet;
