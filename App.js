@@ -520,6 +520,12 @@ const CreatePostScreen = ({ navigation }) => {
     else if (task === '2') {
       return 30;
     }
+    else if (task === '3') {
+      return 20;
+    }
+    else if (task === '4') {
+      return 10;
+    }
     return 0;
   };
   //function to calculate the level based on xp
