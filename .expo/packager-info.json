@@ -1,9 +1,0 @@
-{
-  "expoServerPort": 19000,
-  "packagerPort": 19000,
-  "expoServerNgrokUrl": "https://ep-tzu.anonymous.technovationapp.exp.direct",
-  "packagerNgrokUrl": "https://ep-tzu.anonymous.technovationapp.exp.direct",
-  "ngrokPid": 13836,
-  "packagerPid": null,
-  "webpackServerPort": null
-}
