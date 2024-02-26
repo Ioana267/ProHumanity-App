@@ -392,7 +392,7 @@ const Settings = () => {
               <Text style={styles.dividers}>Log Out -&gt;</Text>
             </TouchableOpacity>
 
-            <Text style={styles.bottomTextContainer}>ProHumanity v.1.0</Text>
+            <Text style={styles.bottomTextContainer}>ProHumanity v.1.2</Text>
 
             <LogoutConfirmationModal
               visible={showLogoutModal}
