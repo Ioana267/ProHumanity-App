@@ -117,9 +117,20 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignUp = async () => {
     try {
+      if (password.length < 8) {
+        setErrorMessage('Password must be at least 8 characters long.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setErrorMessage('Passwords do not match.');
+        return;
+      }
+
       const auth = getAuth();
       const result = await createUserWithEmailAndPassword(auth, email, password);
       console.log('createUserWithEmailAndPassword result:', result);
@@ -142,6 +153,7 @@ const SignUp = ({ navigation }) => {
       console.error('Error signing up:', error.message);
     }
   };
+
   return (
     <View style={styles.signin}>
       <Text style={styles.title}>Sign Up</Text>
@@ -294,12 +306,14 @@ const UsernameSetup = ({ navigation }) => {
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async () => {
     try {
       const auth = getAuth();
       const signInResult = await signInWithEmailAndPassword(auth, email, password);
       console.log('User signed in successfully!');
+      setErrorMessage('');
 
       // Get the user document reference
       const userDocRef = doc(getFirestore(), 'Users', signInResult.user.uid);
@@ -326,6 +340,8 @@ const SignIn = ({ navigation }) => {
       navigation.navigate('Home');
     } catch (error) {
       console.error('Sign-in error:', error.message);
+      // Set error message if sign-in fails
+      setErrorMessage('Incorrect email or password. Please try again.');
     }
   };
 
@@ -530,20 +546,20 @@ const CreatePostScreen = ({ navigation }) => {
   };
   //function to calculate the level based on xp
   const calculatelevel=(userXP)=>{
-    if (userXP>=700) return 15;
-    else if (userXP>= 600)  return 14;
-         else if (userXP>=550) return 13;
-            else if (userXP>=500) return 12;
-                else if (userXP>=450) return 11; 
-                    else if (userXP>=400) return 10;
-                        else if (userXP>=350) return 9;
-                             else if (userXP>=300) return 8;
-                                  else if (userXP>=250) return 7;
-                                       else if (userXP>=200) return 6;
-                                           else if (userXP>=150) return 5;
-                                                else if (userXP>=100 ) return 4;
-                                                    else if (userXP>=60) return 3;
-                                                         else if (userXP>=30) return 2;
+    if (userXP>=4000) return 15;
+    else if (userXP>= 3000)  return 14;
+         else if (userXP>=2500) return 13;
+            else if (userXP>=2000) return 12;
+                else if (userXP>=1700) return 11; 
+                    else if (userXP>=1400) return 10;
+                        else if (userXP>=1200) return 9;
+                             else if (userXP>=900) return 8;
+                                  else if (userXP>=800) return 7;
+                                       else if (userXP>=700) return 6;
+                                           else if (userXP>=550) return 5;
+                                                else if (userXP>=400 ) return 4;
+                                                    else if (userXP>=200) return 3;
+                                                         else if (userXP>=100) return 2;
                                                               else if (userXP>='0') return 1;
   }
   // Function to check if the last post was made on a different day
