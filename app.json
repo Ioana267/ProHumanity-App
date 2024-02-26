@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "TechnovationApp",
-    "slug": "TechnovationApp",
+    "name": "Pro Humanity",
+    "slug": "Pro Humanity",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/IMG-20230124-WA0000.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Screenshot_2024-02-26-17-29-46-87_99c04817c0de5652397fc8b56c3b3817.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/IMG-20230124-WA0000.jpg",
         "backgroundColor": "#ffffff"
       }
     },
