@@ -1,3 +1,4 @@
+//Planet.js
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, PanResponder, Modal, Platform } from 'react-native';
 import { Canvas } from '@react-three/fiber';
@@ -111,71 +112,71 @@ const Planet = () => {
   const nedeedxpfunction=(userLevel, userXP) =>{
     if (userLevel==1) return (
       <View>
-       <Text style={styles.neededXpText}>You need {30 - userXP} xp to reach level {userLevel+1} </Text>
+       <Text style={styles.neededXpText}>You need {100 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     ); else if (userLevel==2) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {60 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==3) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {100 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==4) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {150 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==5) return (
       <View>
         <Text style={styles.neededXpText}>You need {200 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     );
-    else if (userLevel==6) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {250 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==7) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {300 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==8) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {350 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==9) return (
+    else if (userLevel==3) return (
       <View>
         <Text style={styles.neededXpText}>You need {400 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     );
-    else if (userLevel==10) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {450 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==11) return (
-      <View>
-        <Text style={styles.neededXpText}>You need {500 - userXP} xp to reach level {userLevel+1} </Text>
-      </View>
-    );
-    else if (userLevel==12) return (
+    else if (userLevel==4) return (
       <View>
         <Text style={styles.neededXpText}>You need {550 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     );
+    else if (userLevel==5) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {700 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==6) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {800 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==7) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {900 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==8) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {1200 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==9) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {1400 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==10) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {1700 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==11) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {2000 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
+    else if (userLevel==12) return (
+      <View>
+        <Text style={styles.neededXpText}>You need {2500 - userXP} xp to reach level {userLevel+1} </Text>
+      </View>
+    );
     else if (userLevel==13) return (
       <View>
-        <Text style={styles.neededXpText}>You need {600 - userXP} xp to reach level {userLevel+1} </Text>
+        <Text style={styles.neededXpText}>You need {3000 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     );
     else if (userLevel==14) return (
       <View>
-        <Text style={styles.neededXpText}>You need {700 - userXP} xp to reach level {userLevel+1} </Text>
+        <Text style={styles.neededXpText}>You need {4000 - userXP} xp to reach level {userLevel+1} </Text>
       </View>
     );
     else if (userLevel==15) return (
@@ -220,21 +221,28 @@ const Planet = () => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Tasks</Text>
             <View style={styles.taskItemContainer}>
-                <Text style={styles.taskItem}>1. Pick up trash in a park.</Text>
+                <Text style={styles.taskItem}>1. Pick up trash in a park. +10XP</Text>
                 <TouchableOpacity style={styles.addButton}>
                   <Text style={styles.mark} onPrress={handlePostPress} >Mark as done</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.separator} />
               <View style={styles.taskItemContainer}>
-                <Text style={styles.taskItem}>2. Plant a tree.</Text>
+                <Text style={styles.taskItem}>2. Plant a tree. +30XP</Text>
                 <TouchableOpacity style={styles.addButton}>
                   <Text style={styles.mark} onPress={handlePostPress}>Mark as done</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.separator} />
               <View style={styles.taskItemContainer}>
-                <Text style={styles.taskItem}>3. Use your bike to go to a friend instead of the car.</Text>
+                <Text style={styles.taskItem}>3. Use your bike to go to a friend instead of the car. +20XP</Text>
+                <TouchableOpacity style={styles.addButton}>
+                  <Text style={styles.mark} onPress={handlePostPress}>Mark as done</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.separator} />
+              <View style={styles.taskItemContainer}>
+                <Text style={styles.taskItem}>4. Your task. +10XP</Text>
                 <TouchableOpacity style={styles.addButton}>
                   <Text style={styles.mark} onPress={handlePostPress}>Mark as done</Text>
                 </TouchableOpacity>
@@ -453,7 +461,7 @@ neededXPgreenBox: {
     },
     android: {
       // Android specific styles
-      paddingLeft: 90,
+      paddingLeft: 50,
     }
   })
 },
