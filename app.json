@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "Pro Humanity",
-    "slug": "Pro Humanity",
+    "slug": "prohumanity",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/IMG-20230124-WA0000.jpg",
+    "icon": "./assets/IMG-20230124-WA0000.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Screenshot_2024-02-26-17-29-46-87_99c04817c0de5652397fc8b56c3b3817.jpg",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,16 +19,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/IMG-20230124-WA0000.jpg",
+        "foregroundImage": "./assets/IMG-20230124-WA0000.png",
         "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.technowinn.prohumanity"
     },
     "extra": {
       "eas": {
-        "projectId": "f7e68152-8f0f-4192-8084-63b9eaa79db8"
+        "projectId": "9e6e54a5-562b-4ba4-8d9e-a964a5cd99ba"
       }
     },
     "runtimeVersion": {
@@ -36,6 +34,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/f7e68152-8f0f-4192-8084-63b9eaa79db8"
-    }
+    },
+    "owner": "technowinn"
   }
 }
